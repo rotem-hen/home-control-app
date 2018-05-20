@@ -1,0 +1,86 @@
+{
+  "devices": [
+    {
+      "id": "10001f97eb12",
+      "name": "Device",
+      "manufacturerName": "Sonoff",
+      "model": "ITA-GZ1-GL",
+      "version": "1.1.1",
+      "state": {
+        "rssi": "-60",
+        "startup": "last",
+        "switch": "off",
+        "timers": [
+          {
+            "do": {
+              "switch": "on"
+            },
+            "at": "13 4 * * 5,6 *",
+            "type": "repeat",
+            "id": 1521835871556
+          }
+        ]
+      }
+    },
+    {
+      "name": "Other Device",
+      "manufacturerName": "Sonoff",
+      "model": "ITA-GZ1-GL",
+      "version": "1.1.1",
+      "state": {
+        "rssi": "-60",
+        "startup": "last",
+        "switch": "on",
+        "timers": [
+          {
+            "do": {
+              "switch": "off"
+            },
+            "at": "13 4 * * 5,6,4,3 *",
+            "type": "repeat",
+            "id": 1521835871556
+          },
+          {
+            "do": {
+              "switch": "off"
+            },
+            "at": "30 10 * * 7,1,3,2,4 *",
+            "type": "repeat",
+            "id": 1522913340455
+          }
+        ]
+      },
+      "id": "_XPIDAe"
+    },
+    {
+      "name": "Another Device",
+      "manufacturerName": "Sonoff",
+      "model": "ITA-GZ1-GL",
+      "version": "1.1.1",
+      "state": {
+        "rssi": "-60",
+        "startup": "on",
+        "switch": "on",
+        "timers": [
+          {
+            "do": {
+              "switch": "on"
+            },
+            "at": "13 4 * * 5,6 *",
+            "type": "repeat",
+            "id": 1521835871556
+          }
+        ]
+      },
+      "id": "Tkb~okK"
+    }
+  ],
+  "snais": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    }
+  ]
+}
