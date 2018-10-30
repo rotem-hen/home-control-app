@@ -25,7 +25,7 @@ class Timer extends Component {
     const isNew = _.isEmpty(t);
 
     this.setState({
-      id: isNew ? Date.now() : t.id,
+      id: isNew ? '' : t.id,
       chosenDate: isNew ? new Date() : dateConversion.processDateFormat(t.at),
       doSwitch: isNew ? 'on' : t.do.switch,
       repeat: isNew ? false : t.type === 'repeat',

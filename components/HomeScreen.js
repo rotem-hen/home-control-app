@@ -1,9 +1,10 @@
 import { Font } from 'expo';
 import Axios from 'axios';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import { Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import React from 'react';
+import { SERVER_URI } from 'react-native-dotenv';
 import Device from './Device';
 import AddDevice from './AddDevice';
 import styles from '../styles/HomeScreenStyles';
@@ -14,13 +15,19 @@ const fontAwesome = require('../resources/FontAwesome.ttf');
 
 class HomeScreen extends React.Component {
   state = {
+    refreshing: false,
     fontLoaded: false,
     addDeviceModalVisible: false
   };
 
+  onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.fetchData();
+    this.setState({ refreshing: false });
+  }
+
   async componentWillMount() {
-    const resp = await Axios.get('http://192.168.1.117:3000/devices/');
-    this.props.dispatch(actions.getDevices(resp.data));
+    this.fetchData();
 
     await Font.loadAsync({
       typo: typoFont,
@@ -28,6 +35,13 @@ class HomeScreen extends React.Component {
     });
 
     this.setState({ fontLoaded: true });
+  }
+
+  async fetchData() {
+    const resp = await Axios.get(`${SERVER_URI}/devices/`)
+      .catch(e => console.log(`Failed getting devices\n${e}`));
+
+    this.props.dispatch(actions.getDevices(resp.data));
   }
 
   onAddDeviceClick = () => {
@@ -53,6 +67,10 @@ class HomeScreen extends React.Component {
     });
   }
 
+  createNewDevice = (deviceId, deviceName) => {
+    this.props.dispatch(actions.addDevice(deviceId, deviceName));
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -73,6 +91,12 @@ class HomeScreen extends React.Component {
           {
             this.state.fontLoaded ? (
               <FlatList
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.onRefresh}
+                  />
+              }
                 style={{ marginTop: '2%' }}
                 data={this.props.devicesIds}
                 renderItem={({ item }) => (<Device
@@ -100,6 +124,7 @@ class HomeScreen extends React.Component {
         <AddDevice
           addDeviceModalVisible={this.state.addDeviceModalVisible}
           closeModal={this.closeModal}
+          createNewDevice={this.createNewDevice}
         />
 
       </View>

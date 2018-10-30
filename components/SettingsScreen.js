@@ -1,17 +1,21 @@
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import { View, TouchableOpacity, Text, Image, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, Image, FlatList, Alert } from 'react-native';
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import TimerEntry from './TimerEntry';
 import Timer from './Timer';
 import styles from '../styles/SettingsScreenStyles';
 import * as actions from '../actions/actions';
+import DateConversion from './DateConversion';
+
+const dateConversion = new DateConversion();
 
 const on3Image = require('../resources/on3.png');
 const last3Image = require('../resources/last3.png');
 const off3Image = require('../resources/off3.png');
 
-const stateToImage = { on: on3Image, last: last3Image, off: off3Image };
+const stateToImage = { on: on3Image, keep: last3Image, off: off3Image };
 
 class SettingsScreen extends React.Component {
   constructor(props) {
@@ -33,8 +37,27 @@ class SettingsScreen extends React.Component {
     });
   }
 
+  generateTimerName = (at, type) => {
+    let res;
+    if (type === 'repeat') {
+      const [min, hr, , , days] = at.split(' ');
+      res = `${_.sortBy(dateConversion.numberStringToDays(days))} ${dateConversion.UtcHrtoCurrent(hr)}:${min}`;
+    } else {
+      const date = new Date(at).toString();
+      res = `${date.substring(0, date.indexOf('GMT') - 4)}`;
+    }
+    return res;
+  }
+
   onTimerTrashClick = (id) => {
-    this.props.dispatch(actions.timerTrashClick(this.props.deviceId, id));
+    Alert.alert(
+      'Sure?',
+      'Are you sure you want to remove this timer?',
+      [
+        { text: 'Yes', onPress: () => this.props.dispatch(actions.timerTrashClick(this.props.deviceId, id)) },
+        { text: 'No' }
+      ]
+    );
   }
 
   onEditTimerClick = (id) => {
@@ -52,25 +75,19 @@ class SettingsScreen extends React.Component {
   }
 
   saveTimer = (id, formattedDate, doSwitch, repeat) => {
-    let newTimers = this.props.state.timers;
-    const timerIndex = this.props.state.timers.findIndex(timer => timer.id === id);
-    if (timerIndex === -1) {
-      newTimers = [...newTimers, {
-        do: { switch: doSwitch },
-        at: formattedDate,
-        type: repeat ? 'repeat' : 'once',
-        id
-      }];
-    } else {
-      newTimers[timerIndex] = {
-        ...newTimers[timerIndex],
+    if (id === '') {
+      this.props.dispatch(actions.addTimer(this.props.deviceId, {
         do: { switch: doSwitch },
         at: formattedDate,
         type: repeat ? 'repeat' : 'once'
-      };
+      }));
+    } else {
+      this.props.dispatch(actions.updateTimer(this.props.deviceId, id, {
+        do: { switch: doSwitch },
+        at: formattedDate,
+        type: repeat ? 'repeat' : 'once'
+      }));
     }
-
-    this.props.dispatch(actions.updateTimers(this.props.deviceId, newTimers));
 
     this.closeModal();
   }
@@ -116,7 +133,8 @@ class SettingsScreen extends React.Component {
                   data={this.props.state.timers}
                   keyExtractor={item => item.id}
                   renderItem={({ item }) => (<TimerEntry
-                    name={item.id}
+                    name={this.generateTimerName(item.at, item.type)}
+                    id={item.id}
                     onTimerTrashClick={this.onTimerTrashClick}
                     onEditTimerClick={() => this.onEditTimerClick(item.id)}
                   />)}

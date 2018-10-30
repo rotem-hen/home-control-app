@@ -17,31 +17,42 @@ const wifi3 = require('../resources/wifi3.png');
 const wifi4 = require('../resources/wifi4.png');
 
 const wifiIcons = [wifi0, wifi1, wifi2, wifi3, wifi4];
+const rssiSignalMap = [{ start: 0, end: -30, signal: 4 },
+  { start: -31, end: -60, signal: 3 },
+  { start: -61, end: -90, signal: 2 },
+  { start: -91, end: -Infinity, signal: 1 }];
 
 class Device extends React.Component {
-  state = {
-    deviceName: this.props.name,
-    wifiStrength: 4
+  normalizeSignal = (rssi) => {
+    if (!this.state.isOnline) return 0;
+    const i = rssiSignalMap.findIndex(e => _.inRange(rssi, e.start, e.end));
+    return i !== undefined ? rssiSignalMap[i].signal : 0;
   }
 
-  componentDidMount = () => setInterval(this.setWifiStrength, 3000);
+  state = {
+    deviceName: this.props.name,
+    rssi: this.props.rssi,
+    isOnline: this.props.isOnline,
+    wifiStrength: 0
+  }
+
+  componentWillMount = () => {
+    this.setState({
+      wifiStrength: this.normalizeSignal(this.state.rssi)
+    });
+  }
 
   onToggleSwitchClick = () => this.props.dispatch(actions.toggleSwitchClick(this.props.deviceId));
 
   onSettingsClick = () => this.props.navigate('Settings', { deviceId: this.props.deviceId });
-
-  setWifiStrength = () => this.setState({ wifiStrength: _.random(0, 4) });
-
-  isOnline = () => this.state.wifiStrength !== 0;
 
   changeDeviceNameInDB = _.debounce((newName) => {
     this.props.dispatch(actions.changeDeviceName(this.props.deviceId, newName));
   }, 1000);
 
   changeDeviceName = (newName) => {
-    if (newName.length < 1) return;
     this.setState({ deviceName: newName });
-    this.changeDeviceNameInDB(newName);
+    if (newName.length > 0) this.changeDeviceNameInDB(newName);
   }
 
   render() {
@@ -50,7 +61,7 @@ class Device extends React.Component {
 
         <View style={{ flex: 5, alignItems: 'center' }}>
           {
-            (this.isOnline()) ?
+            (this.state.isOnline) ?
               <TouchableOpacity activeOpacity={0.5} onPress={this.onToggleSwitchClick}>
                 <Image source={this.props.toggleSwitch === 'off' ? offImage : onImage} />
               </TouchableOpacity> :
@@ -84,11 +95,11 @@ class Device extends React.Component {
 
             <View style={{ flex: 1, alignItems: 'center' }}>
               <TouchableOpacity
-                disabled={!this.isOnline()}
+                disabled={!this.state.isOnline}
                 activeOpacity={0.5}
                 onPress={this.onSettingsClick}
               >
-                <Text style={!this.isOnline() ? styles.faDisabled : styles.fa}>
+                <Text style={!this.state.isOnline ? styles.faDisabled : styles.fa}>
                   <FontAwesome>{Icons.cog}</FontAwesome>
                 </Text>
               </TouchableOpacity>
@@ -106,6 +117,8 @@ export default connect((state, props) => {
   const device = state.devices.find(item => item.id === props.deviceId);
   return {
     name: device.name,
-    toggleSwitch: device.state.switch
+    toggleSwitch: device.state.switch,
+    rssi: device.state.rssi,
+    isOnline: device.isOnline
   };
 })(Device);

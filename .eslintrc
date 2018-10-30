@@ -6,6 +6,7 @@
         "react/prefer-stateless-function": "off",
         "comma-dangle": ["error", "never"],
         "react/prop-types": "off",
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "react/sort-comp": "off"
     }
 }

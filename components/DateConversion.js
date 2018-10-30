@@ -2,6 +2,11 @@ import _ from 'lodash';
 
 class DateConversion {
   /* From formatted to date object */
+  UtcHrtoCurrent = (hr) => {
+    const today = new Date();
+    return parseInt(hr, 10) - parseInt((today.getTimezoneOffset() / 60), 10);
+  }
+
   numberStringToDays = (numStr) => {
     const numArr = numStr.split(',');
     return numArr.map(num => parseInt(num, 10));
@@ -9,13 +14,14 @@ class DateConversion {
 
   cronFormatToDateObj = (cron) => {
     const today = new Date();
-    const cronElements = cron.split(' ');
+    const [minutes, hours] = cron.split(' ');
+    const hr = this.UtcHrtoCurrent(hours);
     return new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate(),
-      cronElements[1],
-      cronElements[0]
+      hr,
+      minutes
     );
   }
 
@@ -23,16 +29,7 @@ class DateConversion {
     [] :
     this.numberStringToDays(cron.split(' ')[4]));
 
-  isoFormatToDateObj = (iso) => {
-    const dateArr = iso.replace('T', '-').replace(':', '-').split('-');
-    return new Date(
-      dateArr[0],
-      dateArr[1],
-      dateArr[2],
-      dateArr[3],
-      dateArr[4]
-    );
-  }
+  isoFormatToDateObj = iso => new Date(iso);
 
   processDateFormat = (dateFormat) => {
     if (_.indexOf(dateFormat, '*') > -1) {
@@ -44,9 +41,9 @@ class DateConversion {
   /* From date object to formatted */
   daysToNumberString = days => days.reduce((a, b) => `${a},${b}`);
 
-  dateObjToCronFormat = (date, days) => `${date.getMinutes()} ${date.getHours()} * * ${this.daysToNumberString(days)} *`;
+  dateObjToCronFormat = (date, days) => `${date.getMinutes()} ${date.getUTCHours()} * * ${this.daysToNumberString(days)}`;
 
-  dateObjToIsoFormat = date => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}`;
+  dateObjToIsoFormat = date => date.toISOString();
 
   processDateObj = (repeat, date, days) => {
     if (repeat) {

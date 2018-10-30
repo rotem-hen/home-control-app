@@ -1,26 +1,32 @@
-// import { applyMiddleware, createStore } from 'redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import Axios from 'axios';
-// import logger from 'redux-logger';
 import update from 'immutability-helper';
+import thunk from 'redux-thunk';
+import { SERVER_URI } from 'react-native-dotenv';
 
 const defaultState = {
   devices: []
 };
 
-const updateState = (newData, index) => {
-  const { id } = newData.devices[index];
-  Axios.patch(`http://192.168.1.117:3000/devices/${id}`, newData.devices[index]);
+const updateState = (id, newData) => {
+  Axios.patch(`${SERVER_URI}/devices/${id}`, newData)
+    .catch(e => console.log(`Failed patching device id ${id}\n${e.response.data.message}`));
 };
 
 const handleActions = (state = defaultState, action) => {
   let newData;
-  let index;
+  let deviceID;
+  let deviceIndex;
+  let timerID;
   let timerIndex;
+  let temp;
   if (action.data && action.data.deviceId) {
-    index = state.devices.findIndex(dev => dev.id === action.data.deviceId);
+    deviceID = action.data.deviceId;
+    deviceIndex = state.devices.findIndex(dev => dev.id === deviceID);
     if (action.data.timerId) {
-      timerIndex = state.devices[index].state.timers.findIndex(t => t.id === action.data.timerId);
+      timerID = action.data.timerId;
+      timerIndex = state.devices[deviceIndex].state.timers
+        .findIndex(timer => timer.id === timerID);
     }
   }
 
@@ -31,58 +37,71 @@ const handleActions = (state = defaultState, action) => {
 
     case 'REMOVE_DEVICE':
     {
-      const { id } = state.devices[index];
-      newData = update(state, { devices: { $splice: [[index, 1]] } });
-      Axios.delete(`http://192.168.1.117:3000/devices/${id}`);
+      newData = update(state, { devices: { $splice: [[deviceIndex, 1]] } });
+      Axios.delete(`${SERVER_URI}/devices/${deviceID}`)
+        .catch(e => console.log(`Failed removing ${newData.devices[deviceIndex].name}\n${e}`));
       return newData;
     }
 
+    case 'ADD_DEVICE_RESPONSE':
+      newData = update(state, { devices: { $push: [action.data] } });
+      return newData;
     case 'TOGGLE_SWITCH_CLICK':
-      newData = update(state, { devices: { [index]: { state: { switch: { $apply: s => (s === 'on' ? 'off' : 'on') } } } } });
+      temp = state.devices[deviceIndex].state.switch === 'on' ? 'off' : 'on';
+      newData = update(state, { devices: { [deviceIndex]: { state: { switch: { $set: temp } } } } });
+      updateState(newData.devices[deviceIndex].id, { state: { switch: temp } });
       break;
 
     case 'CHANGE_DEVICE_NAME':
-      newData = update(state, { devices: { [index]: { name: { $set: action.data.newName } } } });
+      temp = action.data.newName;
+      newData = update(state, { devices: { [deviceIndex]: { name: { $set: temp } } } });
+      updateState(deviceID, { name: temp });
       break;
 
     case 'SETTINGS_TOGGLE_SWITCH_CLICK':
     {
-      const toggleStates = ['on', 'last', 'off'];
-      newData = update(
-        state,
-        {
-          devices: {
-            [index]: {
-              state: { startup: { $apply: s => toggleStates[(toggleStates.indexOf(s) + 1) % 3] } }
-            }
-          }
-        }
-      );
+      const toggleStates = ['on', 'keep', 'off'];
+      temp = toggleStates[(toggleStates.indexOf(state.devices[deviceIndex].state.startup) + 1) % 3];
+      newData = update(state, { devices: { [deviceIndex]: { state: { startup: { $set: temp } } } } });
+      updateState(deviceID, { state: { startup: temp } });
       break;
     }
 
     case 'TIMER_TRASH_CLICK':
       newData = update(
         state,
-        { devices: { [index]: { state: { timers: { $splice: [[timerIndex, 1]] } } } } }
+        { devices: { [deviceIndex]: { state: { timers: { $splice: [[timerIndex, 1]] } } } } }
       );
+      Axios.delete(`${SERVER_URI}/devices/${deviceID}/timers/${timerID}`)
+        .catch(e => console.log(`Failed deleting timer id ${timerID}\n${e.response.data.message}`));
       break;
 
-    case 'UPDATE_TIMERS':
+    case 'ADD_TIMER_RESPONSE':
       newData = update(
         state,
-        { devices: { [index]: { state: { timers: { $set: action.data.newTimers } } } } }
+        { devices: { [deviceIndex]: { state: { timers: { $push: [action.data.resp.data] } } } } }
       );
+      return newData;
+    case 'UPDATE_TIMER_RESPONSE':
+      temp = action.data.updatedData;
+      newData = update(
+        state,
+        { devices: { [deviceIndex]: { state: { timers: { [timerIndex]: { $set: action.data.resp.data } } } } } }
+      );
+
       break;
 
     default:
       return state;
   }
 
-  updateState(newData, index);
   return newData;
 };
 
-const store = createStore(handleActions);
+const store = createStore(
+  handleActions,
+  applyMiddleware(thunk)
+);
 
 export default store;
+

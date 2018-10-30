@@ -28,16 +28,19 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-eslint": "^8.2.2",
-    "expo": "^23.0.4",
+    "expo": "^24.0.0",
     "immutability-helper": "^2.6.6",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
     "react": "16.0.0",
-    "react-native": "0.50.3",
+    "react-native": "0.51.0",
+    "react-native-dotenv": "^0.1.1",
     "react-native-fontawesome": "^5.7.0",
+    "react-native-svg": "^7.0.0",
     "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   }
 }

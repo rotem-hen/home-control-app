@@ -25,7 +25,7 @@ class TimerEntry extends React.Component {
         <View style={{ flex: 1, alignItems: 'center' }}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => this.props.onTimerTrashClick(this.props.name)}
+            onPress={() => this.props.onTimerTrashClick(this.props.id)}
           >
             <Text style={styles.text}><FontAwesome>{Icons.trashO}</FontAwesome></Text>
           </TouchableOpacity>
