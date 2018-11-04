@@ -4,7 +4,7 @@ class DateConversion {
   /* From formatted to date object */
   UtcHrtoCurrent = (hr) => {
     const today = new Date();
-    return parseInt(hr, 10) - parseInt((today.getTimezoneOffset() / 60), 10);
+    return (parseInt(hr, 10) - parseInt((today.getTimezoneOffset() / 60), 10)) % 24;
   }
 
   numberStringToDays = (numStr) => {
@@ -39,9 +39,11 @@ class DateConversion {
   }
 
   /* From date object to formatted */
+  pad = min => ((min < 10) ? `0${min}` : min);
+
   daysToNumberString = days => days.reduce((a, b) => `${a},${b}`);
 
-  dateObjToCronFormat = (date, days) => `${date.getMinutes()} ${date.getUTCHours()} * * ${this.daysToNumberString(days)}`;
+  dateObjToCronFormat = (date, days) => `${this.pad(date.getMinutes())} ${date.getUTCHours()} * * ${this.daysToNumberString(days)}`;
 
   dateObjToIsoFormat = date => date.toISOString();
 

@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import { Text, View, Modal, DatePickerIOS, TouchableOpacity, Image, FlatList } from 'react-native';
+import { Text, View, Modal, DatePickerIOS, TouchableOpacity, Image, FlatList, Alert } from 'react-native';
 import _ from 'lodash';
 import DateConversion from './DateConversion';
 import styles from '../styles/TimerStyles';
@@ -40,6 +40,16 @@ class Timer extends Component {
   }
 
   onSaveTimerClick = () => {
+    if (this.state.repeat && _.isEmpty(this.state.days)) {
+      Alert.alert(
+        'No Days',
+        'No days were chosen.',
+        [
+          { text: 'OK' }
+        ]
+      );
+      return;
+    }
     this.props.onSaveClick(
       this.state.id,
       dateConversion.processDateObj(this.state.repeat, this.state.chosenDate, this.state.days),
@@ -64,7 +74,7 @@ class Timer extends Component {
       newDays.push(id);
     }
     this.setState({
-      days: newDays
+      days: newDays.sort()
     });
   }
 
@@ -133,7 +143,7 @@ class Timer extends Component {
             <FlatList
               horizontal
               data={[
-                      { key: 7, title: 'Sun' },
+                      { key: 0, title: 'Sun' },
                       { key: 1, title: 'Mon' },
                       { key: 2, title: 'Tue' },
                       { key: 3, title: 'Wed' },

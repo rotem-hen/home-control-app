@@ -41,7 +41,7 @@ class SettingsScreen extends React.Component {
     let res;
     if (type === 'repeat') {
       const [min, hr, , , days] = at.split(' ');
-      res = `${_.sortBy(dateConversion.numberStringToDays(days))} ${dateConversion.UtcHrtoCurrent(hr)}:${min}`;
+      res = `${_.sortBy(dateConversion.numberStringToDays(days))} at ${dateConversion.UtcHrtoCurrent(hr)}:${min}`;
     } else {
       const date = new Date(at).toString();
       res = `${date.substring(0, date.indexOf('GMT') - 4)}`;
