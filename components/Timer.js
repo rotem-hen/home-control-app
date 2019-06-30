@@ -82,7 +82,9 @@ class Timer extends Component {
     if (!this.state.repeat) {
       return styles.disabledDays;
     }
-    return _.indexOf(this.state.days, item.key) > -1 ? styles.selectedDays : styles.days;
+    return _.indexOf(this.state.days, parseInt(item.key, 10)) > -1 ?
+      styles.selectedDays :
+      styles.days;
   }
 
   updateDate = (date) => {
