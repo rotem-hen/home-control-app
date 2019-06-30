@@ -7,25 +7,31 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   headlineView: {
+    position: 'relative',
     backgroundColor: '#F77A54',
-    alignItems: 'center',
-    marginTop: '15%'
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: 50
   },
   headlineViewText: {
-    fontSize: 25,
+    fontSize: 30,
     color: '#475059',
-    margin: '3%',
+    margin: '2.5%',
+    alignSelf: 'center',
     fontFamily: 'typo'
   },
   footer: {
+    position: 'relative',
+    justifyContent: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: '12%',
+    marginBottom: 50,
     backgroundColor: '#F77A54'
   },
   footerText: {
-    fontSize: 30,
+    fontSize: 25,
     color: '#475059',
+    margin: '2.5%',
+    alignSelf: 'center',
     fontFamily: 'typo'
   },
   label: {

@@ -19,6 +19,7 @@ export default StyleSheet.create({
   addDeviceContainer: {
     justifyContent: 'center',
     alignItems: 'flex-end',
+    flex: 2,
     margin: '7%'
   },
   plusButton: {

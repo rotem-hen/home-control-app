@@ -10,25 +10,28 @@ export default StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     backgroundColor: '#F77A54',
-    alignItems: 'center',
-    marginTop: '15%'
+    justifyContent: 'center',
+    marginTop: 50
   },
   headlineViewText: {
-    fontSize: 25,
+    fontSize: 30,
     color: '#475059',
-    margin: '3%',
+    margin: '2.5%',
     fontFamily: 'typo',
     alignSelf: 'center'
   },
   footer: {
     flexDirection: 'row',
+    position: 'relative',
     justifyContent: 'space-around',
-    marginBottom: '12%',
+    marginBottom: 50,
     backgroundColor: '#F77A54'
   },
   footerText: {
-    fontSize: 30,
+    fontSize: 25,
     color: '#475059',
+    margin: '2.5%',
+    alignSelf: 'center',
     fontFamily: 'typo'
   },
   label: {

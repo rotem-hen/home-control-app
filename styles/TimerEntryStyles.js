@@ -9,7 +9,7 @@ export default StyleSheet.create({
     margin: '2%',
     borderColor: 'white',
     borderWidth: 1,
-    paddingBottom: '2%'
+    paddingBottom: '5%'
   },
   text: {
     color: 'white',
