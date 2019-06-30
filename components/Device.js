@@ -18,15 +18,15 @@ const wifi4 = require('../resources/wifi4.png');
 
 const wifiIcons = [wifi0, wifi1, wifi2, wifi3, wifi4];
 const rssiSignalMap = [{ start: 0, end: -30, signal: 4 },
-  { start: -31, end: -60, signal: 3 },
-  { start: -61, end: -90, signal: 2 },
-  { start: -91, end: -Infinity, signal: 1 }];
+  { start: -30, end: -60, signal: 3 },
+  { start: -60, end: -90, signal: 2 },
+  { start: -90, end: -Infinity, signal: 1 }];
 
 class Device extends React.Component {
   normalizeSignal = (rssi) => {
     if (!this.state.isOnline) return 0;
     const i = rssiSignalMap.findIndex(e => _.inRange(rssi, e.start, e.end));
-    return i !== undefined ? rssiSignalMap[i].signal : 0;
+    return i !== undefined && i > -1 ? rssiSignalMap[i].signal : 0;
   }
 
   state = {
@@ -36,7 +36,7 @@ class Device extends React.Component {
     wifiStrength: 0
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     this.setState({
       wifiStrength: this.normalizeSignal(this.state.rssi)
     });
@@ -79,11 +79,11 @@ class Device extends React.Component {
 
         <View style={{ flex: 8 }}>
 
-          <View style={{ flex: 50, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
             <Image style={styles.wifiImage} source={wifiIcons[this.state.wifiStrength]} />
           </View>
 
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 2, flexDirection: 'row' }}>
             <View style={{ flex: 1, alignItems: 'center' }}>
               <TouchableOpacity
                 activeOpacity={0.5}
