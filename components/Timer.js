@@ -78,11 +78,11 @@ class Timer extends Component {
     });
   }
 
-  getDaysStyle = (item) => {
+  getDaysStyle = (id) => {
     if (!this.state.repeat) {
       return styles.disabledDays;
     }
-    return _.indexOf(this.state.days, parseInt(item.key, 10)) > -1 ?
+    return _.indexOf(this.state.days, id) > -1 ?
       styles.selectedDays :
       styles.days;
   }
@@ -133,10 +133,10 @@ class Timer extends Component {
             <TouchableOpacity style={{ margin: '4%' }} activeOpacity={0.5} onPress={this.onRepeatClick}>
               <Text style={{ fontSize: 40, color: 'white' }}>
                 {
-                    this.state.repeat ?
-                      <FontAwesome>{Icons.checkSquareO}</FontAwesome> :
-                      <FontAwesome>{Icons.squareO}</FontAwesome>
-                  }
+                  this.state.repeat ?
+                    <FontAwesome>{Icons.checkSquareO}</FontAwesome> :
+                    <FontAwesome>{Icons.squareO}</FontAwesome>
+                }
               </Text>
             </TouchableOpacity>
           </View>
@@ -157,9 +157,9 @@ class Timer extends Component {
                 <TouchableOpacity
                   style={{ margin: 10 }}
                   activeOpacity={0.5}
-                  onPress={() => this.onDayClick(item.key)}
+                  onPress={() => this.onDayClick(parseInt(item.key, 10))}
                 >
-                  <Text style={this.getDaysStyle(item)}>
+                  <Text style={this.getDaysStyle(parseInt(item.key, 10))}>
                     {item.title}
                   </Text>
                 </TouchableOpacity>)}
