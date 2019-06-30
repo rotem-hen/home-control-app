@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import { SERVER_IP, SERVER_PORT, SERVER_URI, SONOFF_URL } from 'react-native-dotenv';
-import url from 'url';
 import { Text, View, Modal, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import styles from '../styles/AddDeviceStyles';
 
@@ -58,13 +57,12 @@ class AddDevice extends Component {
   }
 
   sendDataToDevice = () => {
-    const urlParsed = url.parse(SERVER_URI);
     Axios.post(`${SONOFF_URL}/ap`, {
       json: {
         version: 4,
         ssid: this.state.wifiNameInput,
         password: this.state.wifiPassInput,
-        serverName: SERVER_IP,/*urlParsed.hostname,*/
+        serverName: SERVER_IP,
         port: parseInt(SERVER_PORT, 10)
       }
     }).then(this.onDataSent)
