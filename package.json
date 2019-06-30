@@ -10,37 +10,39 @@
     "eslint-plugin-react": "^7.7.0",
     "jest-expo": "23.0.0",
     "json-server": "^0.12.1",
-    "react-native-scripts": "1.8.1",
+    "metro-react-native-babel-preset": "^0.54.1",
     "react-test-renderer": "16.0.0"
   },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "main": "./node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "react-native-scripts start",
-    "server": "./node_modules/.bin/json-server --watch ./db/db.json",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js --watch"
+    "start": "expo start",
+    "eject": "expo eject",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "test": "jest"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
     "axios": "^0.18.0",
     "babel-eslint": "^8.2.2",
-    "expo": "^24.0.0",
+    "expo": "^33.0.0",
+    "expo-font": "~5.0.1",
     "immutability-helper": "^2.6.6",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
-    "react": "16.0.0",
-    "react-native": "0.51.0",
-    "react-native-dotenv": "^0.1.1",
+    "react": "^16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-dotenv": "^0.2.0",
     "react-native-fontawesome": "^5.7.0",
     "react-native-svg": "^7.0.0",
     "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "websql": "https://github.com/expo/node-websql/archive/18.0.0.tar.gz"
   }
 }
