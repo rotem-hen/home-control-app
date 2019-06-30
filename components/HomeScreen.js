@@ -1,4 +1,4 @@
-import { Font } from 'expo';
+import * as Font from 'expo-font';
 import Axios from 'axios';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { Text, View, FlatList, TouchableOpacity, Alert, RefreshControl } from 'react-native';

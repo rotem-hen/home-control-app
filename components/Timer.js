@@ -143,13 +143,13 @@ class Timer extends Component {
             <FlatList
               horizontal
               data={[
-                      { key: 0, title: 'Sun' },
-                      { key: 1, title: 'Mon' },
-                      { key: 2, title: 'Tue' },
-                      { key: 3, title: 'Wed' },
-                      { key: 4, title: 'Thu' },
-                      { key: 5, title: 'Fri' },
-                      { key: 6, title: 'Sat' }
+                      { key: '0', title: 'Sun' },
+                      { key: '1', title: 'Mon' },
+                      { key: '2', title: 'Tue' },
+                      { key: '3', title: 'Wed' },
+                      { key: '4', title: 'Thu' },
+                      { key: '5', title: 'Fri' },
+                      { key: '6', title: 'Sat' }
                     ]}
               renderItem={({ item }) => (
                 <TouchableOpacity
