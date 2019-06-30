@@ -7,8 +7,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: '3%',
-    paddingTop: '5%',
-    paddingBottom: '5%'
+    paddingTop: '1%',
+    paddingBottom: '10%'
   },
   nameText: {
     color: 'white',
@@ -26,6 +26,6 @@ export default StyleSheet.create({
   },
   wifiImage: {
     height: '80%',
-    width: '32%'
+    width: '40%'
   }
 });

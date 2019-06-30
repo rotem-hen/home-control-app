@@ -32,8 +32,9 @@ export default StyleSheet.create({
   label: {
     color: 'white',
     margin: '4%',
-    fontSize: 23,
-    fontFamily: 'typo'
+    fontSize: 20,
+    fontFamily: 'typo',
+    lineHeight: 40
   },
   entry: {
     backgroundColor: '#475059',

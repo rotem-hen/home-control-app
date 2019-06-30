@@ -7,6 +7,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   headlineView: {
+    position: 'relative',
+    flexDirection: 'row',
     backgroundColor: '#F77A54',
     alignItems: 'center',
     marginTop: '15%'
@@ -15,7 +17,8 @@ export default StyleSheet.create({
     fontSize: 25,
     color: '#475059',
     margin: '3%',
-    fontFamily: 'typo'
+    fontFamily: 'typo',
+    alignSelf: 'center'
   },
   footer: {
     flexDirection: 'row',
@@ -41,16 +44,19 @@ export default StyleSheet.create({
   days: {
     fontFamily: 'typo',
     fontSize: 20,
-    color: 'white'
+    color: 'white',
+    lineHeight: 40
   },
   selectedDays: {
     fontFamily: 'typo',
     fontSize: 20,
-    color: '#A1B600'
+    color: '#A1B600',
+    lineHeight: 40
   },
   disabledDays: {
     fontFamily: 'typo',
     fontSize: 20,
-    color: 'grey'
+    color: 'grey',
+    lineHeight: 40
   }
 });
