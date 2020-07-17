@@ -31,7 +31,7 @@
     "expo": "^33.0.0",
     "expo-font": "~5.0.1",
     "immutability-helper": "^2.6.6",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.19",
     "prop-types": "^15.6.1",
     "react": "^16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
